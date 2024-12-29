@@ -1,8 +1,10 @@
+#ТЕСТ РАБОТОСПОСОБНОСТИ
+
 import pygame
 
 if __name__ == '__main__':
     pygame.init()
-    pygame.display.set_caption('Перетаскивание')
+    pygame.display.set_caption('боулинг')
     size = width, height = 1000,1000
     screen = pygame.display.set_mode(size)
 
