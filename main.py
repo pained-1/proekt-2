@@ -38,11 +38,18 @@ class Shar(pygame.sprite.Sprite):
 
     def __init__(self, group, x, y):
         super().__init__(group)
-        self.image2 = Bowl.image
+        self.x = x
+        self.y = y
+        self.image2 = Shar.image
+
         self.rect = self.image2.get_rect()
 
-        self.image2 = pygame.transform.scale(self.image2, (0, 0))
+        # self.image2 = pygame.transform.scale(self.image2, (0, 0))
         self.rect.topleft = (x, y)
+    # def draw(self,x,y):
+    #     screen = pygame.display.set_mode((500, 500))
+    #     print(self.image2)
+    #     screen.blit(self.image2, (self.x, self.y))
 
 
 class Bowl(pygame.sprite.Sprite):
@@ -78,9 +85,11 @@ class Bowl(pygame.sprite.Sprite):
 
         if self.yy >= 70:
             self.yy -= 1
+
             self.xx += 0.101
-        Shar(pin_group, self.xx, self.yy)
-        print(pygame.sprite.groupcollide(pin_group, shar_group, False, False))
+        # Shar(pin_group, self.xx, self.yy)
+
+        # print(pygame.sprite.groupcollide(pin_group, shar_group, False, False))
 
         return self.yy
 
@@ -107,7 +116,6 @@ if __name__ == '__main__':
 
     all_sprites = pygame.sprite.Group()
     fon = Bowl(all_sprites, 0, 0)
-    print(fon)
     all_sprites.add(fon)
 
     pin_group = pygame.sprite.Group()
@@ -137,9 +145,15 @@ if __name__ == '__main__':
     pin_group.add(pin3)
     pin_group.add(pin1)
 
-    shar_group = pygame.sprite.Group()
-    shar = Shar(pin_group, 200, 400)
-    shar_group.add(shar)
+    shar_group = pygame.sprite.Sprite(all_sprites)
+    im = load_image("ba1ll30.png")
+    shar_group.image = im
+    shar_group.rect = shar_group.image.get_rect()
+    shar_group.rect.top = 400
+    shar_group.rect.right = 250
+    all_sprites.add(shar_group)
+
+    # shar_group.add(Shar(pin_group, 200, 400))
 
     running = True
 
@@ -166,8 +180,24 @@ if __name__ == '__main__':
 
         all_sprites.draw(screen)
         pin_group.draw(screen)
+        B = False
         if click:
-            all_sprites.update(event)
+            # all_sprites.update(event)
+            if y >= 70:
+                y -= 1
+                x += 0.101
+                shar_group.rect.y -= 1
+
+                B = False
+            else:
+                B = True
+
+            a = pygame.sprite.spritecollide(shar_group, pin_group, B)
+
+            # Shar.draw(x, y)
+            # Shar(pin_group, x, y)
+            # shar_group.draw(screen)
+
         draw_button()
 
         # butt = Bowl(all_sprites, 0, 0)
@@ -176,7 +206,8 @@ if __name__ == '__main__':
         # button_surface.blit(text, text_rect)
         # screen.blit(button_surface, (button_rect.x, button_rect.y))
         # pygame.draw.circle(screen, (255, 255, 255), (x, y), 12)
-        pygame.display.flip()
+        # pygame.display.flip()
+        pygame.display.update()
         clock.tick(155)
 
     pygame.quit()
