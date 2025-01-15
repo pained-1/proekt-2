@@ -2,7 +2,7 @@ import os
 import sys
 import pygame
 import random
-
+from decimal import *
 
 def load_image(name, colorkey=None):
     screen = pygame.display.set_mode((500, 500))
@@ -34,18 +34,17 @@ class Pin(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
 
 class Shar(pygame.sprite.Sprite):
-    image = load_image("ba1ll30.png")
 
-    def __init__(self, group, x, y):
-        super().__init__(group)
-        self.x = x
-        self.y = y
-        self.image2 = Shar.image
 
-        self.rect = self.image2.get_rect()
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((50, 50))
+        self.image.fill((255,255,255))
+        self.rect = self.image.get_rect()
+        self.rect.center = (200, 300)
 
         # self.image2 = pygame.transform.scale(self.image2, (0, 0))
-        self.rect.topleft = (x, y)
+
     # def draw(self,x,y):
     #     screen = pygame.display.set_mode((500, 500))
     #     print(self.image2)
@@ -146,12 +145,13 @@ if __name__ == '__main__':
     pin_group.add(pin1)
 
     shar_group = pygame.sprite.Sprite(all_sprites)
-    im = load_image("ba1ll30.png")
+    im = load_image("ba1ll30-fotor-bg-remover-2025011522518.png")
     shar_group.image = im
     shar_group.rect = shar_group.image.get_rect()
     shar_group.rect.top = 400
     shar_group.rect.right = 250
     all_sprites.add(shar_group)
+
 
     # shar_group.add(Shar(pin_group, 200, 400))
 
@@ -173,6 +173,9 @@ if __name__ == '__main__':
                 if draw_button().collidepoint(event.pos):
                     print("213333333333")
                     click = True
+                    shar_group.rect.y = 400
+                    x = 200
+                    do = pygame.sprite.spritecollide(shar_group, pin_group, False)
 
 
         r += 500 * time
@@ -181,18 +184,31 @@ if __name__ == '__main__':
         all_sprites.draw(screen)
         pin_group.draw(screen)
         B = False
+        first = True
+
         if click:
-            # all_sprites.update(event)
-            if y >= 70:
+            # all_sprites.update(event)\
+            if a == do:
                 y -= 1
                 x += 0.101
                 shar_group.rect.y -= 1
+                shar_group.rect.x += Decimal('0.2')
 
+            # if y >= 70:
+            #     y -= 1
+            #     x += 0.101
+            #     shar_group.rect.y -= 1
                 B = False
             else:
                 B = True
 
-            a = pygame.sprite.spritecollide(shar_group, pin_group, B)
+        if shar_group.rect.y == 23:
+            click = False
+        a = pygame.sprite.spritecollide(shar_group, pin_group, B)
+
+
+
+
 
             # Shar.draw(x, y)
             # Shar(pin_group, x, y)
