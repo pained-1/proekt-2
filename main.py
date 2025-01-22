@@ -3,6 +3,10 @@ import sys
 import pygame
 import random
 from decimal import *
+import pygame_widgets
+from pygame_widgets.slider import Slider
+from pygame_widgets.textbox import TextBox
+
 
 
 def load_image(name, colorkey=None):
@@ -128,23 +132,43 @@ if __name__ == '__main__':
     numbet_udar = 1
     click = False
     a = False
+    h = 0
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
+    timer = 0
+
+    slider = Slider(screen, 350, 480, 200, 20, min=0.1, max=2, step=0.1)
+    # output = TextBox(screen, 150, 450, 30, 30, fontSize=20)
+
+
+
+
+
     while running:
-        time = clock.tick() / 1000
+
         col = 0
 
         for event in pygame.event.get():
+            if event.type == pygame.USEREVENT and click:
+                timer += 1
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and sprite_shar.rect.y == 400:
+                if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and sprite_shar.rect.y == 400 and (
+                        sprite_shar.rect.x >= 370 and sprite_shar.rect.x <= 505):
                     sprite_shar.rect.x -= 10
-                elif event.key == pygame.K_RIGHT and sprite_shar.rect.y == 400:
+                elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and sprite_shar.rect.y == 400 and (
+                        sprite_shar.rect.x >= 370 and sprite_shar.rect.x <= 505):
                     sprite_shar.rect.x += 10
+                if sprite_shar.rect.x >= 505:
+                    sprite_shar.rect.x = 500
+                elif sprite_shar.rect.x <= 375:
+                    sprite_shar.rect.x = 370
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if draw_button("").collidepoint(
                         event.pos) and text_in_button == "Start Game" and a == False and numbet_udar <= 2:
                     text_in_button = "Вернуть Шар"
                     a = True
+                    timer = 0
                     numbet_udar += 1
                     click = True
                     sprite_shar.rect.y = 400
@@ -152,9 +176,11 @@ if __name__ == '__main__':
                 if draw_button("").collidepoint(
                         event.pos) and text_in_button == "Вернуть Шар" and a == False and numbet_udar <= 2:
                     click = True
+                    timer = 0
                     sprite_shar.rect.y = 400
                     text_in_button = "Start Game"
                 elif numbet_udar == 3 and a == False:
+                    timer = 0
                     text_in_button = "Start Game"
                     numbet_udar = 1
                     sprite_shar.rect.y = 400
@@ -164,27 +190,43 @@ if __name__ == '__main__':
                     for i in pin_group_spisok:
                         pin_group.add(i)
                     pin_group.draw(screen)
-
-        r += 500 * time
-
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_w]:
+        #     sprite_shar.rect.x += 1
         all_sprites.draw(screen)
         pin_group.draw(screen)
         shar_group.draw(screen)
         first = True
+        clock = pygame.time.Clock()
 
         if click:
+
+            time = pygame.time.get_ticks() / 100
             h = pygame.sprite.groupcollide(shar_group, pin_group, False, False)
             if a:
                 y -= 1
-                sprite_shar.rect.y -= 1
+                sprite_shar.rect.y -= 1 + slider.value
                 for i in range(0, 10):
                     if pygame.sprite.collide_mask(pin_group_spisok[i], sprite_shar):
                         pin_group_spisok[i].kill()
+                # if sprite_shar.rect.y == 200 and sprite_shar.rect.x <= 420:
 
-        if sprite_shar.rect.y == 110:
+                if sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x <= 410:
+                    sprite_shar.rect.x += timer / 1.5
+                elif sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x >= 470:
+                    sprite_shar.rect.x -= timer / 1.5
+
+        if sprite_shar.rect.y <= 110:
             click = False
+            timer = 0
             a = False
 
+
+
+
+        # output.setText(slider.getValue())
+        events = pygame.event.get()
+        pygame_widgets.update(events)
         draw_button(text_in_button)
         pygame.display.update()
         clock.tick(155)
