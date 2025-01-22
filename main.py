@@ -2,11 +2,12 @@ import os
 import sys
 import pygame
 import random
+import time
 from decimal import *
 import pygame_widgets
 from pygame_widgets.slider import Slider
+from pygame_widgets.toggle import Toggle
 from pygame_widgets.textbox import TextBox
-
 
 
 def load_image(name, colorkey=None):
@@ -135,13 +136,12 @@ if __name__ == '__main__':
     h = 0
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     timer = 0
-
+    startTime = time.time()
     slider = Slider(screen, 350, 480, 200, 20, min=0.1, max=2, step=0.1)
-    # output = TextBox(screen, 150, 450, 30, 30, fontSize=20)
+    slider_x = Slider(screen, 610, 400, 20, 150, min=0.5, max=1.5, step=0.1, vertical=True)
 
-
-
-
+    plus = True
+    slid = True
 
     while running:
 
@@ -168,6 +168,7 @@ if __name__ == '__main__':
                         event.pos) and text_in_button == "Start Game" and a == False and numbet_udar <= 2:
                     text_in_button = "Вернуть Шар"
                     a = True
+                    slid = False
                     timer = 0
                     numbet_udar += 1
                     click = True
@@ -177,10 +178,12 @@ if __name__ == '__main__':
                         event.pos) and text_in_button == "Вернуть Шар" and a == False and numbet_udar <= 2:
                     click = True
                     timer = 0
+                    slid = True
                     sprite_shar.rect.y = 400
                     text_in_button = "Start Game"
                 elif numbet_udar == 3 and a == False:
                     timer = 0
+                    slid = True
                     text_in_button = "Start Game"
                     numbet_udar = 1
                     sprite_shar.rect.y = 400
@@ -198,11 +201,22 @@ if __name__ == '__main__':
         shar_group.draw(screen)
         first = True
         clock = pygame.time.Clock()
+        if slid:
+            if slider_x.value <= 1.5:
+                if plus:
+                    slider_x.setValue(slider_x.value + 0.01)
+            else:
+                plus = False
+            if slider_x.value >= 0.5:
+                if not plus:
+                    slider_x.setValue(slider_x.value - 0.01)
+            else:
+                plus = True
 
         if click:
 
             time = pygame.time.get_ticks() / 100
-            h = pygame.sprite.groupcollide(shar_group, pin_group, False, False)
+            # h = pygame.sprite.groupcollide(shar_group, pin_group, False, False)
             if a:
                 y -= 1
                 sprite_shar.rect.y -= 1 + slider.value
@@ -216,17 +230,20 @@ if __name__ == '__main__':
                 elif sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x >= 470:
                     sprite_shar.rect.x -= timer / 1.5
 
+                if sprite_shar.rect.y % 10 == 0 and slider_x.value <= 1:
+                    sprite_shar.rect.x -= slider_x.value
+                elif sprite_shar.rect.y % 10 == 0 and slider_x.value >= 1:
+                    sprite_shar.rect.x += slider_x.value
+
         if sprite_shar.rect.y <= 110:
             click = False
             timer = 0
             a = False
 
-
-
-
         # output.setText(slider.getValue())
         events = pygame.event.get()
-        pygame_widgets.update(events)
+        if not a:
+            pygame_widgets.update(events)
         draw_button(text_in_button)
         pygame.display.update()
         clock.tick(155)
