@@ -28,15 +28,35 @@ def load_image(name, colorkey=None):
     return image
 
 
+# class Pin(pygame.sprite.Sprite):
+#     image = load_image("kegl.png")
+#     image_fall = load_image("kegl4.png")
+#
+#     def __init__(self, group, x, y):
+#
+#         super().__init__(group)
+#         self.image1 = load_image("kegl.png")
+#         self.rect = self.image1.get_rect()
+#         # self.image1 = pygame.transform.scale(self.image1, (0, 0))
+#         self.rect.topleft = (x, y)
+#     def update(self):
+#         self.image1 = Pin.image_fall
 class Pin(pygame.sprite.Sprite):
-    image = load_image("kegl.png")
-
-    def __init__(self, group, x, y):
+    normal_im = load_image("kegl.png")
+    fall_im = load_image("kegl4.png")
+    def __init__(self,group, x, y):
         super().__init__(group)
-        self.image1 = Bowl.image
-        self.rect = self.image1.get_rect()
-        self.image1 = pygame.transform.scale(self.image1, (0, 0))
-        self.rect.topleft = (x, y)
+        self.image = Pin.normal_im
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    def update(self, *args, **kwargs):
+        # for i in range(0, 10):
+        #     if pygame.sprite.collide_mask(pin_group_spisok[i], sprite_shar):
+        #         self.image = Pin.fall_im
+        pass
+
+
 
 
 class Shar(pygame.sprite.Sprite):
@@ -51,7 +71,7 @@ class Shar(pygame.sprite.Sprite):
 
 class Bowl(pygame.sprite.Sprite):
     image = load_image("1free-bowling-alley-background-vector.png")
-    pin_image = load_image("kegl.png")
+    # pin_image = load_image("kegl11.png")
 
     def __init__(self, group, x, y):
         # НЕОБХОДИМО вызвать конструктор родительского класса Sprite.
@@ -88,6 +108,11 @@ def draw_button(text_in_button):
 
     return button_rect
 
+# pin_group = pygame.sprite.Group()
+# coord_x = [425, 440, 455, 470, 432.5, 446.5, 462.5, 440.5, 455.5, 448]
+# coord_y = [110, 110, 110, 110, 120, 120, 120, 130, 130, 140]
+# for i in range(10):
+#     Pin(pin_group, coord_x[i], coord_y[i])
 
 if __name__ == '__main__':
     pygame.init()
@@ -96,20 +121,13 @@ if __name__ == '__main__':
     screen.fill((255, 255, 255))
 
     all_sprites = pygame.sprite.Group()
+    pin_group = pygame.sprite.Group()
+    coord_x = [425, 440, 455, 470, 432.5, 446.5, 462.5, 440.5, 455.5, 448]
+    coord_y = [110, 110, 110, 110, 120, 120, 120, 130, 130, 140]
+    for i in range(10):
+        Pin(pin_group, coord_x[i], coord_y[i])
     fon = Bowl(all_sprites, 0, 0)
     all_sprites.add(fon)
-
-    pin_group = pygame.sprite.Group()
-    pin7 = Pin(pin_group, 425, 110)
-    pin8 = Pin(pin_group, 440, 110)
-    pin9 = Pin(pin_group, 455, 110)
-    pin10 = Pin(pin_group, 470, 110)
-    pin4 = Pin(pin_group, 432.5, 120)
-    pin5 = Pin(pin_group, 446.5, 120)
-    pin6 = Pin(pin_group, 462.5, 120)
-    pin2 = Pin(pin_group, 440.5, 130)
-    pin3 = Pin(pin_group, 455.5, 130)
-    pin1 = Pin(pin_group, 448, 140)
 
     shar_group = pygame.sprite.Group()
     im = load_image("ba1ll30-fotor-bg-remover-2025011522518.png")
@@ -223,6 +241,7 @@ if __name__ == '__main__':
                 for i in range(0, 10):
                     if pygame.sprite.collide_mask(pin_group_spisok[i], sprite_shar):
                         pin_group_spisok[i].kill()
+
                 # if sprite_shar.rect.y == 200 and sprite_shar.rect.x <= 420:
 
                 if sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x <= 410:
@@ -242,10 +261,11 @@ if __name__ == '__main__':
 
         # output.setText(slider.getValue())
         events = pygame.event.get()
+
         if not a:
             pygame_widgets.update(events)
         draw_button(text_in_button)
         pygame.display.update()
-        clock.tick(155)
+        clock.tick(150)
 
     pygame.quit()
