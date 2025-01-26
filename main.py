@@ -44,19 +44,21 @@ def load_image(name, colorkey=None):
 class Pin(pygame.sprite.Sprite):
     normal_im = load_image("kegl.png")
     fall_im = load_image("kegl4.png")
-    def __init__(self,group, x, y):
+
+    def __init__(self, group, x, y):
         super().__init__(group)
+
         self.image = Pin.normal_im
+
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
     def update(self, *args, **kwargs):
         # for i in range(0, 10):
         #     if pygame.sprite.collide_mask(pin_group_spisok[i], sprite_shar):
         #         self.image = Pin.fall_im
         pass
-
-
 
 
 class Shar(pygame.sprite.Sprite):
@@ -71,6 +73,7 @@ class Shar(pygame.sprite.Sprite):
 
 class Bowl(pygame.sprite.Sprite):
     image = load_image("1free-bowling-alley-background-vector.png")
+
     # pin_image = load_image("kegl11.png")
 
     def __init__(self, group, x, y):
@@ -108,6 +111,7 @@ def draw_button(text_in_button):
 
     return button_rect
 
+
 # pin_group = pygame.sprite.Group()
 # coord_x = [425, 440, 455, 470, 432.5, 446.5, 462.5, 440.5, 455.5, 448]
 # coord_y = [110, 110, 110, 110, 120, 120, 120, 130, 130, 140]
@@ -118,7 +122,6 @@ if __name__ == '__main__':
     pygame.init()
     size = 900, 630
     screen = pygame.display.set_mode(size)
-    screen.fill((255, 255, 255))
 
     all_sprites = pygame.sprite.Group()
     pin_group = pygame.sprite.Group()
@@ -131,6 +134,8 @@ if __name__ == '__main__':
 
     shar_group = pygame.sprite.Group()
     im = load_image("ba1ll30-fotor-bg-remover-2025011522518.png")
+    orig_im = load_image("ba1ll30-fotor-bg-remover-2025011522518.png")
+    im = pygame.transform.scale(orig_im, (40, 40))
     sprite_shar = pygame.sprite.Sprite()
     sprite_shar.image = im
     sprite_shar.rect = sprite_shar.image.get_rect()
@@ -160,7 +165,8 @@ if __name__ == '__main__':
 
     plus = True
     slid = True
-
+    proverka_ydar = [False, False, False, False, False, False, False, False, False, False, False, False]
+    round = 1
     while running:
 
         col = 0
@@ -195,16 +201,33 @@ if __name__ == '__main__':
                 if draw_button("").collidepoint(
                         event.pos) and text_in_button == "Вернуть Шар" and a == False and numbet_udar <= 2:
                     click = True
+
                     timer = 0
                     slid = True
                     sprite_shar.rect.y = 400
                     text_in_button = "Start Game"
                 elif numbet_udar == 3 and a == False:
                     timer = 0
+                    round += 1
                     slid = True
                     text_in_button = "Start Game"
                     numbet_udar = 1
                     sprite_shar.rect.y = 400
+                    if round == 7:
+                        round = 1
+                        ydar1 = ""
+                        ydar2 = ""
+                        ydar3 = ""
+                        ydar4 = ""
+                        ydar5 = ""
+                        ydar1_2 = ""
+                        ydar2_2 = ""
+                        ydar3_2 = ""
+                        ydar4_2 = ""
+                        ydar5_2 = ""
+                        ydar6_2 = ""
+                        proverka_ydar = [False, False, False, False, False, False, False, False, False, False, False,
+                                         False]
                     for i in pin_group:
                         col += 1
                     print(f"Вы сбили {10 - col} кеглей")
@@ -214,11 +237,13 @@ if __name__ == '__main__':
         # keys = pygame.key.get_pressed()
         # if keys[pygame.K_w]:
         #     sprite_shar.rect.x += 1
+
         all_sprites.draw(screen)
         pin_group.draw(screen)
         shar_group.draw(screen)
         first = True
         clock = pygame.time.Clock()
+
         if slid:
             if slider_x.value <= 1.5:
                 if plus:
@@ -232,7 +257,9 @@ if __name__ == '__main__':
                 plus = True
 
         if click:
-
+            if not pin_group and numbet_udar == 2:
+                numbet_udar += 1
+                print("Страйк!!")
             time = pygame.time.get_ticks() / 100
             # h = pygame.sprite.groupcollide(shar_group, pin_group, False, False)
             if a:
@@ -243,12 +270,10 @@ if __name__ == '__main__':
                         pin_group_spisok[i].kill()
 
                 # if sprite_shar.rect.y == 200 and sprite_shar.rect.x <= 420:
-
-                if sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x <= 410:
-                    sprite_shar.rect.x += timer / 1.5
-                elif sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x >= 470:
-                    sprite_shar.rect.x -= timer / 1.5
-
+                if sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x <= 370:
+                    sprite_shar.rect.x += timer * 4
+                elif sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x >= 480:
+                    sprite_shar.rect.x -= timer * 4
                 if sprite_shar.rect.y % 10 == 0 and slider_x.value <= 1:
                     sprite_shar.rect.x -= slider_x.value
                 elif sprite_shar.rect.y % 10 == 0 and slider_x.value >= 1:
@@ -265,6 +290,203 @@ if __name__ == '__main__':
         if not a:
             pygame_widgets.update(events)
         draw_button(text_in_button)
+        pygame.draw.rect(screen, (255, 255, 255),
+                         (350, 10, 240, 80))
+        pygame.draw.line(screen, (0, 0, 0), [350, 50], [590, 50], 3)
+        pygame.draw.line(screen, (0, 0, 0), [392, 10], [392, 90], 3)
+        pygame.draw.line(screen, (0, 0, 0), [430, 10], [430, 90], 3)
+        pygame.draw.line(screen, (0, 0, 0), [470, 10], [470, 90], 3)
+        pygame.draw.line(screen, (0, 0, 0), [510, 10], [510, 90], 3)
+        pygame.draw.line(screen, (0, 0, 0), [550, 10], [550, 90], 3)
+
+        pygame.draw.line(screen, (0, 0, 0), [350, 10], [390, 50], 4)
+        pygame.draw.line(screen, (0, 0, 0), [391, 10], [431, 50], 4)
+        pygame.draw.line(screen, (0, 0, 0), [430, 10], [470, 50], 4)
+        pygame.draw.line(screen, (0, 0, 0), [470, 10], [510, 50], 4)
+        pygame.draw.line(screen, (0, 0, 0), [510, 10], [550, 50], 4)
+        pygame.draw.line(screen, (0, 0, 0), [550, 10], [590, 50], 4)
+
+        if numbet_udar == 2 and round == 1:
+            proverka_ydar[0] = True
+            ostatok = len(pin_group)
+            if len(pin_group) == 0:
+                ydar1 = f"X"
+            elif len(pin_group) == 10:
+                ydar1 = f"-"
+            else:
+                ydar1 = f"{10 - len(pin_group)}"
+            text_ydar1 = f1.render(ydar1, True,
+                                   (0, 0, 0))
+        if numbet_udar == 3 and round == 1:
+            proverka_ydar[1] = True
+            ostatok = len(pin_group)
+            if ostatok - len(pin_group) != 0:
+                ydar1_2 = f"{ostatok - len(pin_group)}"
+            elif len(pin_group) == 0:
+                ydar1_2 = f"X"
+            else:
+                ydar1_2 = f"-"
+            sum_ydar1 = f"{10 - len(pin_group)}"
+            text_sum_ydar1 = f1.render(sum_ydar1, True,
+                                       (0, 0, 0))
+            text_ydar1_2 = f1.render(ydar1_2, True,
+                                     (0, 0, 0))
+        if numbet_udar == 2 and round == 2:
+            proverka_ydar[2] = True
+            ostatok = len(pin_group)
+            if len(pin_group) == 0:
+                ydar2 = f"X"
+            elif len(pin_group) == 10:
+                ydar2 = f"-"
+            else:
+                ydar2 = f"{10 - len(pin_group)}"
+
+            text_ydar2 = f1.render(ydar2, True,
+                                   (0, 0, 0))
+        if numbet_udar == 3 and round == 2:
+            proverka_ydar[3] = True
+            if ostatok - len(pin_group) != 0:
+                ydar2_2 = f"{ostatok - len(pin_group)}"
+            elif len(pin_group) == 0:
+                ydar2_2 = f"X"
+            else:
+                ydar2_2 = f"-"
+            sum_ydar2 = f"{10 - len(pin_group)}"
+            text_sum_ydar2 = f1.render(sum_ydar2, True,
+                                       (0, 0, 0))
+            text_ydar2_2 = f1.render(ydar2_2, True,
+                                     (0, 0, 0))
+        if numbet_udar == 2 and round == 3:
+            proverka_ydar[4] = True
+            ostatok = len(pin_group)
+            if len(pin_group) == 0:
+                ydar3 = f"X"
+            elif len(pin_group) == 10:
+                ydar3 = f"-"
+            else:
+                ydar3 = f"{10 - len(pin_group)}"
+            text_ydar3 = f1.render(ydar3, True,
+                                   (0, 0, 0))
+        if numbet_udar == 3 and round == 3:
+            proverka_ydar[5] = True
+            if ostatok - len(pin_group) != 0:
+                ydar3_2 = f"{ostatok - len(pin_group)}"
+            elif len(pin_group) == 0:
+                ydar3_2 = f"X"
+            else:
+                ydar3_2 = f"-"
+            sum_ydar3 = f"{10 - len(pin_group)}"
+            text_sum_ydar3 = f1.render(sum_ydar3, True,
+                                       (0, 0, 0))
+            text_ydar3_2 = f1.render(ydar3_2, True,
+                                     (0, 0, 0))
+        if numbet_udar == 2 and round == 4:
+            proverka_ydar[6] = True
+            ostatok = len(pin_group)
+            if len(pin_group) == 0:
+                ydar4 = f"X"
+            elif len(pin_group) == 10:
+                ydar4 = f"-"
+            else:
+                ydar4 = f"{10 - len(pin_group)}"
+            text_ydar4 = f1.render(ydar4, True,
+                                   (0, 0, 0))
+        if numbet_udar == 3 and round == 4:
+            proverka_ydar[7] = True
+            if ostatok - len(pin_group) != 0:
+                ydar4_2 = f"{ostatok - len(pin_group)}"
+            elif len(pin_group) == 0:
+                ydar4_2 = f"X"
+            else:
+                ydar4_2 = f"-"
+            sum_ydar4 = f"{10 - len(pin_group)}"
+            text_sum_ydar4 = f1.render(sum_ydar4, True,
+                                       (0, 0, 0))
+            text_ydar4_2 = f1.render(ydar4_2, True,
+                                     (0, 0, 0))
+        if numbet_udar == 2 and round == 5:
+            proverka_ydar[8] = True
+            ostatok = len(pin_group)
+            if len(pin_group) == 0:
+                ydar5 = f"X"
+            elif len(pin_group) == 10:
+                ydar5 = f"-"
+            else:
+                ydar5 = f"{10 - len(pin_group)}"
+            text_ydar5 = f1.render(ydar5, True,
+                                   (0, 0, 0))
+        if numbet_udar == 3 and round == 5:
+            proverka_ydar[9] = True
+            if ostatok - len(pin_group) != 0:
+                ydar5_2 = f"{ostatok - len(pin_group)}"
+            elif len(pin_group) == 0:
+                ydar5_2 = f"X"
+            else:
+                ydar5_2 = f"-"
+            sum_ydar5 = f"{10 - len(pin_group)}"
+            text_sum_ydar5 = f1.render(sum_ydar5, True,
+                                       (0, 0, 0))
+            text_ydar5_2 = f1.render(ydar5_2, True,
+                                     (0, 0, 0))
+        if numbet_udar == 2 and round == 6:
+            proverka_ydar[10] = True
+            ostatok = len(pin_group)
+            if len(pin_group) == 0:
+                ydar6 = f"X"
+            elif len(pin_group) == 10:
+                ydar6 = f"-"
+            else:
+                ydar6 = f"{10 - len(pin_group)}"
+            text_ydar6 = f1.render(ydar6, True,
+                                   (0, 0, 0))
+        if numbet_udar == 3 and round == 6:
+            proverka_ydar[11] = True
+            if ostatok - len(pin_group) != 0:
+                ydar6_2 = f"{ostatok - len(pin_group)}"
+            elif len(pin_group) == 0:
+                ydar6_2 = f"X"
+            else:
+                ydar6_2 = f"-"
+            sum_ydar6 = f"{10 - len(pin_group)}"
+            text_sum_ydar6 = f1.render(sum_ydar6, True,
+                                       (0, 0, 0))
+            text_ydar6_2 = f1.render(ydar6_2, True,
+                                     (0, 0, 0))
+
+        f1 = pygame.font.Font(None, 36)
+
+        if proverka_ydar[0]:
+            screen.blit(text_ydar1, (360, 28))
+
+        if proverka_ydar[1]:
+            screen.blit(text_ydar1_2, (375, 10))
+            screen.blit(text_sum_ydar1, (360, 60))
+        if proverka_ydar[2]:
+            screen.blit(text_ydar2, (400, 27))
+        if proverka_ydar[3]:
+            screen.blit(text_ydar2_2, (415, 10))
+            screen.blit(text_sum_ydar2, (400, 60))
+        if proverka_ydar[4]:
+            screen.blit(text_ydar3, (440, 28))
+        if proverka_ydar[5]:
+            screen.blit(text_ydar3_2, (455, 10))
+            screen.blit(text_sum_ydar3, (440, 60))
+        if proverka_ydar[6]:
+            screen.blit(text_ydar4, (480, 28))
+        if proverka_ydar[7]:
+            screen.blit(text_ydar4_2, (495, 10))
+            screen.blit(text_sum_ydar4, (480, 60))
+        if proverka_ydar[8]:
+            screen.blit(text_ydar5, (520, 28))
+        if proverka_ydar[9]:
+            screen.blit(text_ydar5_2, (535, 10))
+            screen.blit(text_sum_ydar5, (520, 60))
+        if proverka_ydar[10]:
+            screen.blit(text_ydar6, (560, 28))
+        if proverka_ydar[11]:
+            screen.blit(text_ydar6_2, (575, 10))
+            screen.blit(text_sum_ydar6, (560, 60))
+
         pygame.display.update()
         clock.tick(150)
 
