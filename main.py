@@ -3,11 +3,10 @@ import sys
 import pygame
 import random
 import time
+import pygame_menu
 from decimal import *
 import pygame_widgets
 from pygame_widgets.slider import Slider
-from pygame_widgets.toggle import Toggle
-from pygame_widgets.textbox import TextBox
 
 
 def load_image(name, colorkey=None):
@@ -26,6 +25,35 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+
+class Menu():
+    #создаём список меню, с расположением, именем, цветом, цвет выбранного меню
+    #номер пункта
+    def __init__(self, punkts = [120, 140, u"punkt" , (250,250,30),(250,30,250)]):
+    #передаём список команде Punkts
+     self.punkts = punkts
+     #отображаем повержность, где будем рисовать, экземпляр шрифта,номер активного элеменат
+    def render(self, poverhost, font, num_punkt):
+     #цикл фор, кот перебирает совпадает ли номер переданной функций
+     # если совпадает, то закрашивается цветом активного элемента
+        for i in self.punkts:
+          if num_punkt == i [5]:
+             poverhost.blit(font.render(i[2],1,i[4]),(i[0], i[1]))
+          else:
+             poverhost.blit(font.render(i[2],1,i[3]),(i[0], i[1]))
+#Основная функция, которая реализует систему меню
+    def menu(self):
+         done = True
+#задаём шрифт
+         font_menu = pygame.font.SysFont("Blackoak Std",60)
+         # деактивируем залипание клавишщь чтобы работала кнопка ESCAPE
+         pygame.key.set_repeat(0,0)
+         #Делаем видимый курсор в меню
+         pygame.mouse.set_visible(True)
+         #хранение и использование переменной
+         punkt = 0
+
 
 
 # class Pin(pygame.sprite.Sprite):
@@ -167,6 +195,7 @@ if __name__ == '__main__':
     slid = True
     proverka_ydar = [False, False, False, False, False, False, False, False, False, False, False, False]
     round = 1
+    sum_total = 0
     while running:
 
         col = 0
@@ -192,6 +221,7 @@ if __name__ == '__main__':
                         event.pos) and text_in_button == "Start Game" and a == False and numbet_udar <= 2:
                     text_in_button = "Вернуть Шар"
                     a = True
+
                     slid = False
                     timer = 0
                     numbet_udar += 1
@@ -210,6 +240,7 @@ if __name__ == '__main__':
                     timer = 0
                     round += 1
                     slid = True
+                    sum_total += 10 - len(pin_group)
                     text_in_button = "Start Game"
                     numbet_udar = 1
                     sprite_shar.rect.y = 400
@@ -226,6 +257,7 @@ if __name__ == '__main__':
                         ydar4_2 = ""
                         ydar5_2 = ""
                         ydar6_2 = ""
+                        sum_total = 0
                         proverka_ydar = [False, False, False, False, False, False, False, False, False, False, False,
                                          False]
                     for i in pin_group:
@@ -284,6 +316,7 @@ if __name__ == '__main__':
             timer = 0
             a = False
 
+
         # output.setText(slider.getValue())
         events = pygame.event.get()
 
@@ -305,6 +338,9 @@ if __name__ == '__main__':
         pygame.draw.line(screen, (0, 0, 0), [470, 10], [510, 50], 4)
         pygame.draw.line(screen, (0, 0, 0), [510, 10], [550, 50], 4)
         pygame.draw.line(screen, (0, 0, 0), [550, 10], [590, 50], 4)
+
+        pygame.draw.rect(screen, (255, 255, 255),
+                         (610, 10, 50, 50))
 
         if numbet_udar == 2 and round == 1:
             proverka_ydar[0] = True
@@ -340,7 +376,6 @@ if __name__ == '__main__':
                 ydar2 = f"-"
             else:
                 ydar2 = f"{10 - len(pin_group)}"
-
             text_ydar2 = f1.render(ydar2, True,
                                    (0, 0, 0))
         if numbet_udar == 3 and round == 2:
@@ -453,11 +488,16 @@ if __name__ == '__main__':
             text_ydar6_2 = f1.render(ydar6_2, True,
                                      (0, 0, 0))
 
-        f1 = pygame.font.Font(None, 36)
+        f1 = pygame.font.Font(None, 30)
+        text_sum_all = f1.render("TTL", True,
+                                   (0, 0, 0))
+        screen.blit(text_sum_all, (610, 10))
+        text_sum_all_col = f1.render(f"{sum_total}", True,
+                                 (0, 0, 0))
+        screen.blit(text_sum_all_col, (610, 30))
 
         if proverka_ydar[0]:
             screen.blit(text_ydar1, (360, 28))
-
         if proverka_ydar[1]:
             screen.blit(text_ydar1_2, (375, 10))
             screen.blit(text_sum_ydar1, (360, 60))
