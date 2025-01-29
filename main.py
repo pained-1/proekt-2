@@ -7,6 +7,48 @@ import pygame_menu
 from decimal import *
 import pygame_widgets
 from pygame_widgets.slider import Slider
+from PyQt6 import QtCore, QtMultimedia
+
+
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+
+def start_screen():
+    FPS = 10
+    screen = pygame.display.set_mode((900, 630))
+    pygame.init()
+    clock = pygame.time.Clock()
+    intro_text = ["БОУЛИНГ", "",
+                  "Правила игры:",
+                  "Сбей все кегли",
+                  "Управление: кнопки A D и стрелочки < >",
+                  "что бы кинуть шар нажмите мышкой на кнопку start game",
+                  "НАЖМИТЕ ЛЮБУЮ КНОПКУ ЧТО БЫ ПРОДОЛЖИТЬ!"]
+
+    fon = pygame.transform.scale(load_image('fon.jpg'), (900, 630))
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    for line in intro_text:
+        string_rendered = font.render(line, 1, pygame.Color('black'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 10
+        intro_rect.top = text_coord
+        intro_rect.x = 10
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or \
+                    event.type == pygame.MOUSEBUTTONDOWN:
+                return  # начинаем игру
+        pygame.display.flip()
+        clock.tick(FPS)
 
 
 def load_image(name, colorkey=None):
@@ -57,19 +99,6 @@ class Menu():
         punkt = 0
 
 
-# class Pin(pygame.sprite.Sprite):
-#     image = load_image("kegl.png")
-#     image_fall = load_image("kegl4.png")
-#
-#     def __init__(self, group, x, y):
-#
-#         super().__init__(group)
-#         self.image1 = load_image("kegl.png")
-#         self.rect = self.image1.get_rect()
-#         # self.image1 = pygame.transform.scale(self.image1, (0, 0))
-#         self.rect.topleft = (x, y)
-#     def update(self):
-#         self.image1 = Pin.image_fall
 class Pin(pygame.sprite.Sprite):
     normal_im = load_image("kegl.png")
     fall_im = load_image("kegl4.png")
@@ -82,12 +111,6 @@ class Pin(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
-    def update(self, *args, **kwargs):
-        # for i in range(0, 10):
-        #     if pygame.sprite.collide_mask(pin_group_spisok[i], sprite_shar):
-        #         self.image = Pin.fall_im
-        pass
 
 
 class Shar(pygame.sprite.Sprite):
@@ -102,8 +125,6 @@ class Shar(pygame.sprite.Sprite):
 
 class Bowl(pygame.sprite.Sprite):
     image = load_image("1free-bowling-alley-background-vector.png")
-
-    # pin_image = load_image("kegl11.png")
 
     def __init__(self, group, x, y):
         # НЕОБХОДИМО вызвать конструктор родительского класса Sprite.
@@ -120,11 +141,6 @@ class Bowl(pygame.sprite.Sprite):
         self.yy = 300
 
         self.r = 0
-
-    def update(self, *args):
-        time = clock.tick() / 1000
-
-        return self.yy
 
 
 def draw_button(text_in_button):
@@ -182,7 +198,7 @@ def Draw_chifr_tabl(numbet_udar, round, proverka_ydar):
                                (0, 0, 0))
     if numbet_udar == 3 and round == 1:
         proverka_ydar[1] = True
-        ostatok = len(pin_group)
+
         if ostatok - len(pin_group) != 0:
             ydar1_2 = f"{ostatok - len(pin_group)}"
         elif len(pin_group) == 0:
@@ -353,16 +369,12 @@ def Draw_chifr_tabl(numbet_udar, round, proverka_ydar):
         screen.blit(text_sum_ydar6, (560, 60))
 
 
-# pin_group = pygame.sprite.Group()
-# coord_x = [425, 440, 455, 470, 432.5, 446.5, 462.5, 440.5, 455.5, 448]
-# coord_y = [110, 110, 110, 110, 120, 120, 120, 130, 130, 140]
-# for i in range(10):
-#     Pin(pin_group, coord_x[i], coord_y[i])
 text_ydar1 = text_ydar2 = text_ydar3 = text_ydar4 = text_ydar5 = text_ydar6 = text_ydar1_2 = text_ydar2_2 = \
     text_ydar3_2 = text_ydar4_2 = text_ydar5_2 = text_ydar6_2 = ""
 text_sum_ydar1 = text_sum_ydar2 = text_sum_ydar3 = text_sum_ydar4 = text_sum_ydar5 = text_sum_ydar6 = ""
 ostatok = 0
 if __name__ == '__main__':
+    start_screen()
     pygame.init()
     size = 900, 630
     screen = pygame.display.set_mode(size)
@@ -413,9 +425,7 @@ if __name__ == '__main__':
     round = 1
     sum_total = 0
     while running:
-
         col = 0
-
         for event in pygame.event.get():
             if event.type == pygame.USEREVENT and click:
                 timer += 1
@@ -437,7 +447,6 @@ if __name__ == '__main__':
                         event.pos) and text_in_button == "Start Game" and a == False and numbet_udar <= 2:
                     text_in_button = "Вернуть Шар"
                     a = True
-
                     slid = False
                     timer = 0
                     numbet_udar += 1
@@ -447,7 +456,6 @@ if __name__ == '__main__':
                 if draw_button("").collidepoint(
                         event.pos) and text_in_button == "Вернуть Шар" and a == False and numbet_udar <= 2:
                     click = True
-
                     timer = 0
                     slid = True
                     sprite_shar.rect.y = 400
@@ -482,9 +490,6 @@ if __name__ == '__main__':
                     for i in pin_group_spisok:
                         pin_group.add(i)
                     pin_group.draw(screen)
-        # keys = pygame.key.get_pressed()
-        # if keys[pygame.K_w]:
-        #     sprite_shar.rect.x += 1
 
         all_sprites.draw(screen)
         pin_group.draw(screen)
@@ -509,7 +514,6 @@ if __name__ == '__main__':
                 numbet_udar += 1
                 print("Страйк!!")
             time = pygame.time.get_ticks() / 100
-            # h = pygame.sprite.groupcollide(shar_group, pin_group, False, False)
             if a:
                 y -= 1
                 sprite_shar.rect.y -= 1 + slider.value
@@ -517,7 +521,6 @@ if __name__ == '__main__':
                     if pygame.sprite.collide_mask(pin_group_spisok[i], sprite_shar):
                         pin_group_spisok[i].kill()
 
-                # if sprite_shar.rect.y == 200 and sprite_shar.rect.x <= 420:
                 if sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x <= 370:
                     sprite_shar.rect.x += timer * 4
                 elif sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x >= 480:
@@ -540,7 +543,6 @@ if __name__ == '__main__':
 
         Draw_tabl()
         Draw_chifr_tabl(numbet_udar, round, proverka_ydar)
-
         pygame.display.update()
         clock.tick(150)
 
