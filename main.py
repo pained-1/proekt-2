@@ -28,32 +28,33 @@ def load_image(name, colorkey=None):
 
 
 class Menu():
-    #создаём список меню, с расположением, именем, цветом, цвет выбранного меню
-    #номер пункта
-    def __init__(self, punkts = [120, 140, u"punkt" , (250,250,30),(250,30,250)]):
-    #передаём список команде Punkts
-     self.punkts = punkts
-     #отображаем повержность, где будем рисовать, экземпляр шрифта,номер активного элеменат
-    def render(self, poverhost, font, num_punkt):
-     #цикл фор, кот перебирает совпадает ли номер переданной функций
-     # если совпадает, то закрашивается цветом активного элемента
-        for i in self.punkts:
-          if num_punkt == i [5]:
-             poverhost.blit(font.render(i[2],1,i[4]),(i[0], i[1]))
-          else:
-             poverhost.blit(font.render(i[2],1,i[3]),(i[0], i[1]))
-#Основная функция, которая реализует систему меню
-    def menu(self):
-         done = True
-#задаём шрифт
-         font_menu = pygame.font.SysFont("Blackoak Std",60)
-         # деактивируем залипание клавишщь чтобы работала кнопка ESCAPE
-         pygame.key.set_repeat(0,0)
-         #Делаем видимый курсор в меню
-         pygame.mouse.set_visible(True)
-         #хранение и использование переменной
-         punkt = 0
+    # создаём список меню, с расположением, именем, цветом, цвет выбранного меню
+    # номер пункта
+    def __init__(self, punkts=[120, 140, u"punkt", (250, 250, 30), (250, 30, 250)]):
+        # передаём список команде Punkts
+        self.punkts = punkts
 
+    # отображаем повержность, где будем рисовать, экземпляр шрифта,номер активного элеменат
+    def render(self, poverhost, font, num_punkt):
+        # цикл фор, кот перебирает совпадает ли номер переданной функций
+        # если совпадает, то закрашивается цветом активного элемента
+        for i in self.punkts:
+            if num_punkt == i[5]:
+                poverhost.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
+            else:
+                poverhost.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
+
+    # Основная функция, которая реализует систему меню
+    def menu(self):
+        done = True
+        # задаём шрифт
+        font_menu = pygame.font.SysFont("Blackoak Std", 60)
+        # деактивируем залипание клавишщь чтобы работала кнопка ESCAPE
+        pygame.key.set_repeat(0, 0)
+        # Делаем видимый курсор в меню
+        pygame.mouse.set_visible(True)
+        # хранение и использование переменной
+        punkt = 0
 
 
 # class Pin(pygame.sprite.Sprite):
@@ -140,12 +141,227 @@ def draw_button(text_in_button):
     return button_rect
 
 
+def Draw_tabl():
+    draw_button(text_in_button)
+    pygame.draw.rect(screen, (255, 255, 255),
+                     (350, 10, 240, 80))
+    pygame.draw.line(screen, (0, 0, 0), [350, 50], [590, 50], 3)
+    pygame.draw.line(screen, (0, 0, 0), [392, 10], [392, 90], 3)
+    pygame.draw.line(screen, (0, 0, 0), [430, 10], [430, 90], 3)
+    pygame.draw.line(screen, (0, 0, 0), [470, 10], [470, 90], 3)
+    pygame.draw.line(screen, (0, 0, 0), [510, 10], [510, 90], 3)
+    pygame.draw.line(screen, (0, 0, 0), [550, 10], [550, 90], 3)
+
+    pygame.draw.line(screen, (0, 0, 0), [350, 10], [390, 50], 4)
+    pygame.draw.line(screen, (0, 0, 0), [391, 10], [431, 50], 4)
+    pygame.draw.line(screen, (0, 0, 0), [430, 10], [470, 50], 4)
+    pygame.draw.line(screen, (0, 0, 0), [470, 10], [510, 50], 4)
+    pygame.draw.line(screen, (0, 0, 0), [510, 10], [550, 50], 4)
+    pygame.draw.line(screen, (0, 0, 0), [550, 10], [590, 50], 4)
+
+    pygame.draw.rect(screen, (255, 255, 255),
+                     (610, 10, 50, 50))
+
+
+def Draw_chifr_tabl(numbet_udar, round, proverka_ydar):
+    global text_ydar1, text_ydar2, text_ydar3, text_ydar4, text_ydar5, text_ydar6, text_ydar1_2, text_ydar2_2, \
+        text_ydar3_2, text_ydar4_2, text_ydar5_2, text_ydar6_2
+    global text_sum_ydar1, text_sum_ydar2, text_sum_ydar3, text_sum_ydar4, text_sum_ydar5, text_sum_ydar6
+    global ostatok
+    f1 = pygame.font.Font(None, 30)
+    if numbet_udar == 2 and round == 1:
+        proverka_ydar[0] = True
+        ostatok = len(pin_group)
+        if len(pin_group) == 0:
+            ydar1 = f"X"
+        elif len(pin_group) == 10:
+            ydar1 = f"-"
+        else:
+            ydar1 = f"{10 - len(pin_group)}"
+        text_ydar1 = f1.render(ydar1, True,
+                               (0, 0, 0))
+    if numbet_udar == 3 and round == 1:
+        proverka_ydar[1] = True
+        ostatok = len(pin_group)
+        if ostatok - len(pin_group) != 0:
+            ydar1_2 = f"{ostatok - len(pin_group)}"
+        elif len(pin_group) == 0:
+            ydar1_2 = f"X"
+        else:
+            ydar1_2 = f"-"
+        sum_ydar1 = f"{10 - len(pin_group)}"
+        text_sum_ydar1 = f1.render(sum_ydar1, True,
+                                   (0, 0, 0))
+        text_ydar1_2 = f1.render(ydar1_2, True,
+                                 (0, 0, 0))
+    if numbet_udar == 2 and round == 2:
+        proverka_ydar[2] = True
+        ostatok = len(pin_group)
+        if len(pin_group) == 0:
+            ydar2 = f"X"
+        elif len(pin_group) == 10:
+            ydar2 = f"-"
+        else:
+            ydar2 = f"{10 - len(pin_group)}"
+        text_ydar2 = f1.render(ydar2, True,
+                               (0, 0, 0))
+    if numbet_udar == 3 and round == 2:
+        proverka_ydar[3] = True
+        if ostatok - len(pin_group) != 0:
+            ydar2_2 = f"{ostatok - len(pin_group)}"
+        elif len(pin_group) == 0:
+            ydar2_2 = f"X"
+        else:
+            ydar2_2 = f"-"
+        sum_ydar2 = f"{10 - len(pin_group)}"
+        text_sum_ydar2 = f1.render(sum_ydar2, True,
+                                   (0, 0, 0))
+        text_ydar2_2 = f1.render(ydar2_2, True,
+                                 (0, 0, 0))
+    if numbet_udar == 2 and round == 3:
+        proverka_ydar[4] = True
+        ostatok = len(pin_group)
+        if len(pin_group) == 0:
+            ydar3 = f"X"
+        elif len(pin_group) == 10:
+            ydar3 = f"-"
+        else:
+            ydar3 = f"{10 - len(pin_group)}"
+        text_ydar3 = f1.render(ydar3, True,
+                               (0, 0, 0))
+    if numbet_udar == 3 and round == 3:
+        proverka_ydar[5] = True
+        if ostatok - len(pin_group) != 0:
+            ydar3_2 = f"{ostatok - len(pin_group)}"
+        elif len(pin_group) == 0:
+            ydar3_2 = f"X"
+        else:
+            ydar3_2 = f"-"
+        sum_ydar3 = f"{10 - len(pin_group)}"
+        text_sum_ydar3 = f1.render(sum_ydar3, True,
+                                   (0, 0, 0))
+        text_ydar3_2 = f1.render(ydar3_2, True,
+                                 (0, 0, 0))
+    if numbet_udar == 2 and round == 4:
+        proverka_ydar[6] = True
+        ostatok = len(pin_group)
+        if len(pin_group) == 0:
+            ydar4 = f"X"
+        elif len(pin_group) == 10:
+            ydar4 = f"-"
+        else:
+            ydar4 = f"{10 - len(pin_group)}"
+        text_ydar4 = f1.render(ydar4, True,
+                               (0, 0, 0))
+    if numbet_udar == 3 and round == 4:
+        proverka_ydar[7] = True
+        if ostatok - len(pin_group) != 0:
+            ydar4_2 = f"{ostatok - len(pin_group)}"
+        elif len(pin_group) == 0:
+            ydar4_2 = f"X"
+        else:
+            ydar4_2 = f"-"
+        sum_ydar4 = f"{10 - len(pin_group)}"
+        text_sum_ydar4 = f1.render(sum_ydar4, True,
+                                   (0, 0, 0))
+        text_ydar4_2 = f1.render(ydar4_2, True,
+                                 (0, 0, 0))
+    if numbet_udar == 2 and round == 5:
+        proverka_ydar[8] = True
+        ostatok = len(pin_group)
+        if len(pin_group) == 0:
+            ydar5 = f"X"
+        elif len(pin_group) == 10:
+            ydar5 = f"-"
+        else:
+            ydar5 = f"{10 - len(pin_group)}"
+        text_ydar5 = f1.render(ydar5, True,
+                               (0, 0, 0))
+    if numbet_udar == 3 and round == 5:
+        proverka_ydar[9] = True
+        if ostatok - len(pin_group) != 0:
+            ydar5_2 = f"{ostatok - len(pin_group)}"
+        elif len(pin_group) == 0:
+            ydar5_2 = f"X"
+        else:
+            ydar5_2 = f"-"
+        sum_ydar5 = f"{10 - len(pin_group)}"
+        text_sum_ydar5 = f1.render(sum_ydar5, True,
+                                   (0, 0, 0))
+        text_ydar5_2 = f1.render(ydar5_2, True,
+                                 (0, 0, 0))
+    if numbet_udar == 2 and round == 6:
+        proverka_ydar[10] = True
+        ostatok = len(pin_group)
+        if len(pin_group) == 0:
+            ydar6 = f"X"
+        elif len(pin_group) == 10:
+            ydar6 = f"-"
+        else:
+            ydar6 = f"{10 - len(pin_group)}"
+        text_ydar6 = f1.render(ydar6, True,
+                               (0, 0, 0))
+    if numbet_udar == 3 and round == 6:
+        proverka_ydar[11] = True
+        if ostatok - len(pin_group) != 0:
+            ydar6_2 = f"{ostatok - len(pin_group)}"
+        elif len(pin_group) == 0:
+            ydar6_2 = f"X"
+        else:
+            ydar6_2 = f"-"
+        sum_ydar6 = f"{10 - len(pin_group)}"
+        text_sum_ydar6 = f1.render(sum_ydar6, True,
+                                   (0, 0, 0))
+        text_ydar6_2 = f1.render(ydar6_2, True,
+                                 (0, 0, 0))
+
+    text_sum_all = f1.render("TTL", True,
+                             (0, 0, 0))
+    screen.blit(text_sum_all, (610, 10))
+    text_sum_all_col = f1.render(f"{sum_total}", True,
+                                 (0, 0, 0))
+    screen.blit(text_sum_all_col, (610, 30))
+    if proverka_ydar[0]:
+        screen.blit(text_ydar1, (360, 28))
+    if proverka_ydar[1]:
+        screen.blit(text_ydar1_2, (375, 10))
+        screen.blit(text_sum_ydar1, (360, 60))
+    if proverka_ydar[2]:
+        screen.blit(text_ydar2, (400, 27))
+    if proverka_ydar[3]:
+        screen.blit(text_ydar2_2, (415, 10))
+        screen.blit(text_sum_ydar2, (400, 60))
+    if proverka_ydar[4]:
+        screen.blit(text_ydar3, (440, 28))
+    if proverka_ydar[5]:
+        screen.blit(text_ydar3_2, (455, 10))
+        screen.blit(text_sum_ydar3, (440, 60))
+    if proverka_ydar[6]:
+        screen.blit(text_ydar4, (480, 28))
+    if proverka_ydar[7]:
+        screen.blit(text_ydar4_2, (495, 10))
+        screen.blit(text_sum_ydar4, (480, 60))
+    if proverka_ydar[8]:
+        screen.blit(text_ydar5, (520, 28))
+    if proverka_ydar[9]:
+        screen.blit(text_ydar5_2, (535, 10))
+        screen.blit(text_sum_ydar5, (520, 60))
+    if proverka_ydar[10]:
+        screen.blit(text_ydar6, (560, 28))
+    if proverka_ydar[11]:
+        screen.blit(text_ydar6_2, (575, 10))
+        screen.blit(text_sum_ydar6, (560, 60))
+
+
 # pin_group = pygame.sprite.Group()
 # coord_x = [425, 440, 455, 470, 432.5, 446.5, 462.5, 440.5, 455.5, 448]
 # coord_y = [110, 110, 110, 110, 120, 120, 120, 130, 130, 140]
 # for i in range(10):
 #     Pin(pin_group, coord_x[i], coord_y[i])
-
+text_ydar1 = text_ydar2 = text_ydar3 = text_ydar4 = text_ydar5 = text_ydar6 = text_ydar1_2 = text_ydar2_2 = \
+    text_ydar3_2 = text_ydar4_2 = text_ydar5_2 = text_ydar6_2 = ""
+text_sum_ydar1 = text_sum_ydar2 = text_sum_ydar3 = text_sum_ydar4 = text_sum_ydar5 = text_sum_ydar6 = ""
+ostatok = 0
 if __name__ == '__main__':
     pygame.init()
     size = 900, 630
@@ -316,216 +532,14 @@ if __name__ == '__main__':
             timer = 0
             a = False
 
-
         # output.setText(slider.getValue())
         events = pygame.event.get()
 
         if not a:
             pygame_widgets.update(events)
-        draw_button(text_in_button)
-        pygame.draw.rect(screen, (255, 255, 255),
-                         (350, 10, 240, 80))
-        pygame.draw.line(screen, (0, 0, 0), [350, 50], [590, 50], 3)
-        pygame.draw.line(screen, (0, 0, 0), [392, 10], [392, 90], 3)
-        pygame.draw.line(screen, (0, 0, 0), [430, 10], [430, 90], 3)
-        pygame.draw.line(screen, (0, 0, 0), [470, 10], [470, 90], 3)
-        pygame.draw.line(screen, (0, 0, 0), [510, 10], [510, 90], 3)
-        pygame.draw.line(screen, (0, 0, 0), [550, 10], [550, 90], 3)
 
-        pygame.draw.line(screen, (0, 0, 0), [350, 10], [390, 50], 4)
-        pygame.draw.line(screen, (0, 0, 0), [391, 10], [431, 50], 4)
-        pygame.draw.line(screen, (0, 0, 0), [430, 10], [470, 50], 4)
-        pygame.draw.line(screen, (0, 0, 0), [470, 10], [510, 50], 4)
-        pygame.draw.line(screen, (0, 0, 0), [510, 10], [550, 50], 4)
-        pygame.draw.line(screen, (0, 0, 0), [550, 10], [590, 50], 4)
-
-        pygame.draw.rect(screen, (255, 255, 255),
-                         (610, 10, 50, 50))
-
-        if numbet_udar == 2 and round == 1:
-            proverka_ydar[0] = True
-            ostatok = len(pin_group)
-            if len(pin_group) == 0:
-                ydar1 = f"X"
-            elif len(pin_group) == 10:
-                ydar1 = f"-"
-            else:
-                ydar1 = f"{10 - len(pin_group)}"
-            text_ydar1 = f1.render(ydar1, True,
-                                   (0, 0, 0))
-        if numbet_udar == 3 and round == 1:
-            proverka_ydar[1] = True
-            ostatok = len(pin_group)
-            if ostatok - len(pin_group) != 0:
-                ydar1_2 = f"{ostatok - len(pin_group)}"
-            elif len(pin_group) == 0:
-                ydar1_2 = f"X"
-            else:
-                ydar1_2 = f"-"
-            sum_ydar1 = f"{10 - len(pin_group)}"
-            text_sum_ydar1 = f1.render(sum_ydar1, True,
-                                       (0, 0, 0))
-            text_ydar1_2 = f1.render(ydar1_2, True,
-                                     (0, 0, 0))
-        if numbet_udar == 2 and round == 2:
-            proverka_ydar[2] = True
-            ostatok = len(pin_group)
-            if len(pin_group) == 0:
-                ydar2 = f"X"
-            elif len(pin_group) == 10:
-                ydar2 = f"-"
-            else:
-                ydar2 = f"{10 - len(pin_group)}"
-            text_ydar2 = f1.render(ydar2, True,
-                                   (0, 0, 0))
-        if numbet_udar == 3 and round == 2:
-            proverka_ydar[3] = True
-            if ostatok - len(pin_group) != 0:
-                ydar2_2 = f"{ostatok - len(pin_group)}"
-            elif len(pin_group) == 0:
-                ydar2_2 = f"X"
-            else:
-                ydar2_2 = f"-"
-            sum_ydar2 = f"{10 - len(pin_group)}"
-            text_sum_ydar2 = f1.render(sum_ydar2, True,
-                                       (0, 0, 0))
-            text_ydar2_2 = f1.render(ydar2_2, True,
-                                     (0, 0, 0))
-        if numbet_udar == 2 and round == 3:
-            proverka_ydar[4] = True
-            ostatok = len(pin_group)
-            if len(pin_group) == 0:
-                ydar3 = f"X"
-            elif len(pin_group) == 10:
-                ydar3 = f"-"
-            else:
-                ydar3 = f"{10 - len(pin_group)}"
-            text_ydar3 = f1.render(ydar3, True,
-                                   (0, 0, 0))
-        if numbet_udar == 3 and round == 3:
-            proverka_ydar[5] = True
-            if ostatok - len(pin_group) != 0:
-                ydar3_2 = f"{ostatok - len(pin_group)}"
-            elif len(pin_group) == 0:
-                ydar3_2 = f"X"
-            else:
-                ydar3_2 = f"-"
-            sum_ydar3 = f"{10 - len(pin_group)}"
-            text_sum_ydar3 = f1.render(sum_ydar3, True,
-                                       (0, 0, 0))
-            text_ydar3_2 = f1.render(ydar3_2, True,
-                                     (0, 0, 0))
-        if numbet_udar == 2 and round == 4:
-            proverka_ydar[6] = True
-            ostatok = len(pin_group)
-            if len(pin_group) == 0:
-                ydar4 = f"X"
-            elif len(pin_group) == 10:
-                ydar4 = f"-"
-            else:
-                ydar4 = f"{10 - len(pin_group)}"
-            text_ydar4 = f1.render(ydar4, True,
-                                   (0, 0, 0))
-        if numbet_udar == 3 and round == 4:
-            proverka_ydar[7] = True
-            if ostatok - len(pin_group) != 0:
-                ydar4_2 = f"{ostatok - len(pin_group)}"
-            elif len(pin_group) == 0:
-                ydar4_2 = f"X"
-            else:
-                ydar4_2 = f"-"
-            sum_ydar4 = f"{10 - len(pin_group)}"
-            text_sum_ydar4 = f1.render(sum_ydar4, True,
-                                       (0, 0, 0))
-            text_ydar4_2 = f1.render(ydar4_2, True,
-                                     (0, 0, 0))
-        if numbet_udar == 2 and round == 5:
-            proverka_ydar[8] = True
-            ostatok = len(pin_group)
-            if len(pin_group) == 0:
-                ydar5 = f"X"
-            elif len(pin_group) == 10:
-                ydar5 = f"-"
-            else:
-                ydar5 = f"{10 - len(pin_group)}"
-            text_ydar5 = f1.render(ydar5, True,
-                                   (0, 0, 0))
-        if numbet_udar == 3 and round == 5:
-            proverka_ydar[9] = True
-            if ostatok - len(pin_group) != 0:
-                ydar5_2 = f"{ostatok - len(pin_group)}"
-            elif len(pin_group) == 0:
-                ydar5_2 = f"X"
-            else:
-                ydar5_2 = f"-"
-            sum_ydar5 = f"{10 - len(pin_group)}"
-            text_sum_ydar5 = f1.render(sum_ydar5, True,
-                                       (0, 0, 0))
-            text_ydar5_2 = f1.render(ydar5_2, True,
-                                     (0, 0, 0))
-        if numbet_udar == 2 and round == 6:
-            proverka_ydar[10] = True
-            ostatok = len(pin_group)
-            if len(pin_group) == 0:
-                ydar6 = f"X"
-            elif len(pin_group) == 10:
-                ydar6 = f"-"
-            else:
-                ydar6 = f"{10 - len(pin_group)}"
-            text_ydar6 = f1.render(ydar6, True,
-                                   (0, 0, 0))
-        if numbet_udar == 3 and round == 6:
-            proverka_ydar[11] = True
-            if ostatok - len(pin_group) != 0:
-                ydar6_2 = f"{ostatok - len(pin_group)}"
-            elif len(pin_group) == 0:
-                ydar6_2 = f"X"
-            else:
-                ydar6_2 = f"-"
-            sum_ydar6 = f"{10 - len(pin_group)}"
-            text_sum_ydar6 = f1.render(sum_ydar6, True,
-                                       (0, 0, 0))
-            text_ydar6_2 = f1.render(ydar6_2, True,
-                                     (0, 0, 0))
-
-        f1 = pygame.font.Font(None, 30)
-        text_sum_all = f1.render("TTL", True,
-                                   (0, 0, 0))
-        screen.blit(text_sum_all, (610, 10))
-        text_sum_all_col = f1.render(f"{sum_total}", True,
-                                 (0, 0, 0))
-        screen.blit(text_sum_all_col, (610, 30))
-
-        if proverka_ydar[0]:
-            screen.blit(text_ydar1, (360, 28))
-        if proverka_ydar[1]:
-            screen.blit(text_ydar1_2, (375, 10))
-            screen.blit(text_sum_ydar1, (360, 60))
-        if proverka_ydar[2]:
-            screen.blit(text_ydar2, (400, 27))
-        if proverka_ydar[3]:
-            screen.blit(text_ydar2_2, (415, 10))
-            screen.blit(text_sum_ydar2, (400, 60))
-        if proverka_ydar[4]:
-            screen.blit(text_ydar3, (440, 28))
-        if proverka_ydar[5]:
-            screen.blit(text_ydar3_2, (455, 10))
-            screen.blit(text_sum_ydar3, (440, 60))
-        if proverka_ydar[6]:
-            screen.blit(text_ydar4, (480, 28))
-        if proverka_ydar[7]:
-            screen.blit(text_ydar4_2, (495, 10))
-            screen.blit(text_sum_ydar4, (480, 60))
-        if proverka_ydar[8]:
-            screen.blit(text_ydar5, (520, 28))
-        if proverka_ydar[9]:
-            screen.blit(text_ydar5_2, (535, 10))
-            screen.blit(text_sum_ydar5, (520, 60))
-        if proverka_ydar[10]:
-            screen.blit(text_ydar6, (560, 28))
-        if proverka_ydar[11]:
-            screen.blit(text_ydar6_2, (575, 10))
-            screen.blit(text_sum_ydar6, (560, 60))
+        Draw_tabl()
+        Draw_chifr_tabl(numbet_udar, round, proverka_ydar)
 
         pygame.display.update()
         clock.tick(150)
