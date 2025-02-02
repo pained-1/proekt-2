@@ -4,12 +4,11 @@ import pygame
 import random
 import time
 import pygame_menu
-from decimal import *
 import pygame_widgets
 from pygame_widgets.slider import Slider
-from PyQt6 import QtCore, QtMultimedia
 
 
+# Создание правил
 def terminate():
     pygame.quit()
     sys.exit()
@@ -51,6 +50,7 @@ def start_screen():
         clock.tick(FPS)
 
 
+# загрузка изображений
 def load_image(name, colorkey=None):
     screen = pygame.display.set_mode((900, 630))
     fullname = os.path.join('data', name)
@@ -69,36 +69,36 @@ def load_image(name, colorkey=None):
     return image
 
 
-class Menu():
-    # создаём список меню, с расположением, именем, цветом, цвет выбранного меню
-    # номер пункта
-    def __init__(self, punkts=[120, 140, u"punkt", (250, 250, 30), (250, 30, 250)]):
-        # передаём список команде Punkts
-        self.punkts = punkts
+# class Menu():
+#     # создаём список меню, с расположением, именем, цветом, цвет выбранного меню
+#     # номер пункта
+#     def __init__(self, punkts=[120, 140, u"punkt", (250, 250, 30), (250, 30, 250)]):
+#         # передаём список команде Punkts
+#         self.punkts = punkts
+#
+#     # отображаем повержность, где будем рисовать, экземпляр шрифта,номер активного элеменат
+#     def render(self, poverhost, font, num_punkt):
+#         # цикл фор, кот перебирает совпадает ли номер переданной функций
+#         # если совпадает, то закрашивается цветом активного элемента
+#         for i in self.punkts:
+#             if num_punkt == i[5]:
+#                 poverhost.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
+#             else:
+#                 poverhost.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
+#
+#     # Основная функция, которая реализует систему меню
+#     def menu(self):
+#         done = True
+#         # задаём шрифт
+#         font_menu = pygame.font.SysFont("Blackoak Std", 60)
+#         # деактивируем залипание клавишщь чтобы работала кнопка ESCAPE
+#         pygame.key.set_repeat(0, 0)
+#         # Делаем видимый курсор в меню
+#         pygame.mouse.set_visible(True)
+#         # хранение и использование переменной
+#         punkt = 0
 
-    # отображаем повержность, где будем рисовать, экземпляр шрифта,номер активного элеменат
-    def render(self, poverhost, font, num_punkt):
-        # цикл фор, кот перебирает совпадает ли номер переданной функций
-        # если совпадает, то закрашивается цветом активного элемента
-        for i in self.punkts:
-            if num_punkt == i[5]:
-                poverhost.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
-            else:
-                poverhost.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
-
-    # Основная функция, которая реализует систему меню
-    def menu(self):
-        done = True
-        # задаём шрифт
-        font_menu = pygame.font.SysFont("Blackoak Std", 60)
-        # деактивируем залипание клавишщь чтобы работала кнопка ESCAPE
-        pygame.key.set_repeat(0, 0)
-        # Делаем видимый курсор в меню
-        pygame.mouse.set_visible(True)
-        # хранение и использование переменной
-        punkt = 0
-
-
+# Создание кегль
 class Pin(pygame.sprite.Sprite):
     normal_im = load_image("kegl.png")
     fall_im = load_image("kegl4.png")
@@ -113,16 +113,7 @@ class Pin(pygame.sprite.Sprite):
         self.rect.y = y
 
 
-class Shar(pygame.sprite.Sprite):
-
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 50))
-        self.image.fill((255, 255, 255))
-        self.rect = self.image.get_rect()
-        self.rect.center = (200, 300)
-
-
+# Создание шара для боулинга
 class Bowl(pygame.sprite.Sprite):
     image = load_image("1free-bowling-alley-background-vector.png")
 
@@ -143,6 +134,7 @@ class Bowl(pygame.sprite.Sprite):
         self.r = 0
 
 
+# Создание кнопки start game
 def draw_button(text_in_button):
     font = pygame.font.Font(None, 24)
     button_surface = pygame.Surface((150, 50))
@@ -157,10 +149,12 @@ def draw_button(text_in_button):
     return button_rect
 
 
+# отрисовка таблицы
 def Draw_tabl():
     draw_button(text_in_button)
     pygame.draw.rect(screen, (255, 255, 255),
                      (350, 10, 240, 80))
+    # горизонатлные линии
     pygame.draw.line(screen, (0, 0, 0), [350, 50], [590, 50], 3)
     pygame.draw.line(screen, (0, 0, 0), [392, 10], [392, 90], 3)
     pygame.draw.line(screen, (0, 0, 0), [430, 10], [430, 90], 3)
@@ -168,6 +162,7 @@ def Draw_tabl():
     pygame.draw.line(screen, (0, 0, 0), [510, 10], [510, 90], 3)
     pygame.draw.line(screen, (0, 0, 0), [550, 10], [550, 90], 3)
 
+    # вертикальные линии
     pygame.draw.line(screen, (0, 0, 0), [350, 10], [390, 50], 4)
     pygame.draw.line(screen, (0, 0, 0), [391, 10], [431, 50], 4)
     pygame.draw.line(screen, (0, 0, 0), [430, 10], [470, 50], 4)
@@ -179,6 +174,7 @@ def Draw_tabl():
                      (610, 10, 50, 50))
 
 
+# подсчет результатов в таблице
 def Draw_chifr_tabl(numbet_udar, round, proverka_ydar):
     global text_ydar1, text_ydar2, text_ydar3, text_ydar4, text_ydar5, text_ydar6, text_ydar1_2, text_ydar2_2, \
         text_ydar3_2, text_ydar4_2, text_ydar5_2, text_ydar6_2
@@ -373,7 +369,9 @@ text_ydar1 = text_ydar2 = text_ydar3 = text_ydar4 = text_ydar5 = text_ydar6 = te
     text_ydar3_2 = text_ydar4_2 = text_ydar5_2 = text_ydar6_2 = ""
 text_sum_ydar1 = text_sum_ydar2 = text_sum_ydar3 = text_sum_ydar4 = text_sum_ydar5 = text_sum_ydar6 = ""
 ostatok = 0
+# оснвоной цикл
 if __name__ == '__main__':
+    # создание экрана
     start_screen()
     pygame.init()
     size = 900, 630
@@ -381,8 +379,10 @@ if __name__ == '__main__':
 
     all_sprites = pygame.sprite.Group()
     pin_group = pygame.sprite.Group()
+    # координаты кегль
     coord_x = [425, 440, 455, 470, 432.5, 446.5, 462.5, 440.5, 455.5, 448]
     coord_y = [110, 110, 110, 110, 120, 120, 120, 130, 130, 140]
+    # отрисовка кегль
     for i in range(10):
         Pin(pin_group, coord_x[i], coord_y[i])
     fon = Bowl(all_sprites, 0, 0)
@@ -416,7 +416,9 @@ if __name__ == '__main__':
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     timer = 0
     startTime = time.time()
+    # сила удара
     slider = Slider(screen, 350, 480, 200, 20, min=0.1, max=2, step=0.1)
+    # вращение шара
     slider_x = Slider(screen, 610, 400, 20, 150, min=0.5, max=1.5, step=0.1, vertical=True)
 
     plus = True
@@ -432,17 +434,21 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
+                # движение шара влево
                 if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and sprite_shar.rect.y == 400 and (
                         sprite_shar.rect.x >= 370 and sprite_shar.rect.x <= 505):
                     sprite_shar.rect.x -= 10
+                # движение шара вправо
                 elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and sprite_shar.rect.y == 400 and (
                         sprite_shar.rect.x >= 370 and sprite_shar.rect.x <= 505):
                     sprite_shar.rect.x += 10
+                # что бы шар не укатилься за пределы
                 if sprite_shar.rect.x >= 505:
                     sprite_shar.rect.x = 500
                 elif sprite_shar.rect.x <= 375:
                     sprite_shar.rect.x = 370
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # нажатие на кнопку start game
                 if draw_button("").collidepoint(
                         event.pos) and text_in_button == "Start Game" and a == False and numbet_udar <= 2:
                     text_in_button = "Вернуть Шар"
@@ -460,6 +466,7 @@ if __name__ == '__main__':
                     slid = True
                     sprite_shar.rect.y = 400
                     text_in_button = "Start Game"
+                # если последний удар(2)
                 elif numbet_udar == 3 and a == False:
                     timer = 0
                     round += 1
@@ -490,13 +497,13 @@ if __name__ == '__main__':
                     for i in pin_group_spisok:
                         pin_group.add(i)
                     pin_group.draw(screen)
-
+        # отрисовка спрайтов
         all_sprites.draw(screen)
         pin_group.draw(screen)
         shar_group.draw(screen)
         first = True
         clock = pygame.time.Clock()
-
+        # управление слайдером
         if slid:
             if slider_x.value <= 1.5:
                 if plus:
@@ -510,17 +517,20 @@ if __name__ == '__main__':
                 plus = True
 
         if click:
+            # проверка на старайк
             if not pin_group and numbet_udar == 2:
                 numbet_udar += 1
                 print("Страйк!!")
             time = pygame.time.get_ticks() / 100
             if a:
+                # если кнопка была нажата
                 y -= 1
                 sprite_shar.rect.y -= 1 + slider.value
                 for i in range(0, 10):
+                    # удаление кегль
                     if pygame.sprite.collide_mask(pin_group_spisok[i], sprite_shar):
                         pin_group_spisok[i].kill()
-
+                # Дейтсвия что бы шар не укатилься
                 if sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x <= 370:
                     sprite_shar.rect.x += timer * 4
                 elif sprite_shar.rect.y % 10 == 0 and sprite_shar.rect.x >= 480:
@@ -529,7 +539,7 @@ if __name__ == '__main__':
                     sprite_shar.rect.x -= slider_x.value
                 elif sprite_shar.rect.y % 10 == 0 and slider_x.value >= 1:
                     sprite_shar.rect.x += slider_x.value
-
+        # если шар доехал до конца
         if sprite_shar.rect.y <= 110:
             click = False
             timer = 0
@@ -540,10 +550,11 @@ if __name__ == '__main__':
 
         if not a:
             pygame_widgets.update(events)
-
+        # отрисовка таблицы
         Draw_tabl()
+        # рисовка цифр в таблице
         Draw_chifr_tabl(numbet_udar, round, proverka_ydar)
         pygame.display.update()
         clock.tick(150)
-
+    # выход из игры
     pygame.quit()
