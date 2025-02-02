@@ -558,3 +558,4 @@ if __name__ == '__main__':
         clock.tick(150)
     # выход из игры
     pygame.quit()
+print("Спасибо за игру!")
