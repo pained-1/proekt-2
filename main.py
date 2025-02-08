@@ -53,7 +53,7 @@ def start_screen():
 # загрузка изображений
 def load_image(name, colorkey=None):
     screen = pygame.display.set_mode((900, 630))
-    fullname = os.path.join('data', name)
+    fullname = os.path.join("data", name)
     # если файл не существует, то выходим
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
